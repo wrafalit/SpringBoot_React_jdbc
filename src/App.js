@@ -7,6 +7,7 @@ import { getAllStudents } from './client';
 import { Table, Avatar, Spin, Modal, Empty } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import { errorNotification } from './Notification';
+import CourseDetails from './CourseDetails';
 
 const antIcon = (
   <LoadingOutlined
@@ -54,6 +55,10 @@ const columns = [
   },
 ];
 
+const expandedRowRender = (record) => {
+  return <CourseDetails studentId={record.studentId} />;
+};
+
 function App() {
   const [students, setStudents] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
@@ -74,8 +79,8 @@ function App() {
             fetchStudents();
           }}
           onFailure={(error) => {
-            const message = error.message;
-            const description = error.httpStatus;
+            // const message = error.message;
+            // const description = error.httpStatus;
             errorNotification('err', 'err');
           }}
           />
@@ -128,6 +133,9 @@ function App() {
             dataSource={students}
             pagination={false}
             rowKey="studentId"
+            expandable={{
+              expandedRowRender,
+            }}
           />
         </div>
         {commonElements()};
